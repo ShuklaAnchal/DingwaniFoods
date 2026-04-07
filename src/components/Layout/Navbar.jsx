@@ -8,32 +8,32 @@ const Navbar = () => {
   return (
     <header style={styles.header}>
       <div className="container" style={styles.container}>
-        <Link to="/" style={styles.logo}>
+        <Link to="/" style={styles.logo} className="nav-logo">
           <img src="/logo.png" alt="Dingwani Foods Logo" style={{ height: '48px', width: 'auto' }} />
         </Link>
         
         {/* Desktop Menu */}
-        <nav style={styles.desktopNav}>
-          <Link to="/" style={styles.link}>Home</Link>
-          <Link to="/about" style={styles.link}>About Us</Link>
-          <Link to="/products" style={styles.link}>Our Products</Link>
-          <a href="#contact" className="btn btn-secondary" style={{ padding: '8px 20px' }}>Contact</a>
+        <nav style={styles.desktopNav} className="desktop-nav">
+          <Link to="/" style={styles.link} className="nav-link">Home</Link>
+          <Link to="/about" style={styles.link} className="nav-link">About Us</Link>
+          <Link to="/products" style={styles.link} className="nav-link">Our Products</Link>
+          <a href="#contact" className="btn btn-secondary card-pop" style={{ padding: '8px 24px' }}>Contact</a>
         </nav>
 
         {/* Mobile Menu Toggle */}
         <button className="mobile-toggle" style={styles.mobileToggle} onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X color="white" /> : <Menu color="white" />}
+          {isOpen ? <X color="white" size={28} /> : <Menu color="white" size={28} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      {isOpen && (
+      {/* Mobile Menu Container */}
+      <div className={`mobile-nav-container ${isOpen ? 'open' : ''}`}>
         <nav style={styles.mobileNav}>
           <Link to="/" style={styles.mobileLink} onClick={() => setIsOpen(false)}>Home</Link>
           <Link to="/about" style={styles.mobileLink} onClick={() => setIsOpen(false)}>About Us</Link>
           <Link to="/products" style={styles.mobileLink} onClick={() => setIsOpen(false)}>Products</Link>
         </nav>
-      )}
+      </div>
     </header>
   );
 };
@@ -44,7 +44,7 @@ const styles = {
     position: 'sticky',
     top: 0,
     zIndex: 100,
-    boxShadow: 'var(--shadow-sm)'
+    boxShadow: 'var(--shadow-md)'
   },
   container: {
     display: 'flex',
@@ -56,7 +56,8 @@ const styles = {
     fontWeight: 700,
     fontSize: '2rem',
     display: 'flex',
-    gap: '6px'
+    gap: '6px',
+    zIndex: 101,
   },
   desktopNav: {
     display: 'flex',
@@ -66,24 +67,27 @@ const styles = {
   link: {
     color: 'var(--color-white)',
     fontWeight: 500,
-    transition: 'color 0.2s',
   },
   mobileToggle: {
     display: 'none',
     background: 'none',
     border: 'none',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    padding: '8px',
+    zIndex: 101,
   },
   mobileNav: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '16px 24px',
+    padding: '0 24px 24px 24px',
     backgroundColor: 'var(--color-primary)',
     borderTop: '1px solid rgba(255,255,255,0.1)'
   },
   mobileLink: {
     color: 'white',
-    padding: '12px 0',
+    padding: '16px 0',
+    fontSize: '1.1rem',
+    fontWeight: 500,
     borderBottom: '1px solid rgba(255,255,255,0.1)'
   }
 };

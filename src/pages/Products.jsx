@@ -1,18 +1,21 @@
 import React from 'react';
 import ProductCard from '../components/ProductCard';
 import useScrollReveal from '../hooks/useScrollReveal';
+import { products, categories } from '../data/products';
 
 /* Category section — each gets its own reveal */
 const CategoryBlock = ({ cat, index }) => {
   const [ref, visible] = useScrollReveal();
-  const staggerMap = ['reveal-stagger-1', 'reveal-stagger-2', 'reveal-stagger-3', 'reveal-stagger-4'];
+  const staggerMap = ['reveal-stagger-1', 'reveal-stagger-2', 'reveal-stagger-3', 'reveal-stagger-4', 'reveal-stagger-5'];
+
+  // Filter products for this category
+  const catItems = products.filter(p => cat.itemIds.includes(p.id));
 
   return (
     <div ref={ref} style={{ marginBottom: '96px' }}>
       <div className={`reveal reveal-left ${visible ? 'visible' : ''}`}>
-        <h2 style={{
+        <h2 className="heading-underline visible" style={{
           fontSize: '2rem',
-          borderBottom: '3px solid var(--color-secondary)',
           paddingBottom: '8px',
           display: 'inline-block',
           marginBottom: '40px',
@@ -22,13 +25,15 @@ const CategoryBlock = ({ cat, index }) => {
         </h2>
       </div>
       <div style={styles.grid}>
-        {cat.items.map((prod, j) => (
-          <div key={j} className={`reveal card-pop ${visible ? 'visible' : ''} ${staggerMap[j] || ''}`}>
+        {catItems.map((prod, j) => (
+          <div key={prod.id} className={`reveal card-pop ${visible ? 'visible' : ''} ${staggerMap[j] || ''}`}>
             <ProductCard
+              id={prod.id}
               name={prod.name}
-              category={cat.title}
-              description={prod.desc}
+              category={prod.category}
+              description={prod.description}
               imageColor={prod.color}
+              image={prod.image}
             />
           </div>
         ))}
@@ -40,31 +45,13 @@ const CategoryBlock = ({ cat, index }) => {
 const Products = () => {
   const [heroRef, heroVisible] = useScrollReveal();
 
-  const categories = [
-    {
-      title: 'Signature Wafer Bites',
-      items: [
-        { name: 'Choco Delight',    desc: 'Intense dark chocolate sandwiched between light crispy layers.', color: '#8d5524' },
-        { name: 'Vanilla Bean',     desc: 'Smooth, fragrant vanilla cream filling.', color: '#f1e3d3' },
-        { name: 'Strawberry Swirl', desc: 'Tangy and sweet strawberry explosion.', color: '#ffb3c6' },
-      ],
-    },
-    {
-      title: 'Classic Wafer Cones',
-      items: [
-        { name: 'Hazelnut Wrap',   desc: 'Crispy cone filled to the brim with rich hazelnut spread.', color: '#c68e17' },
-        { name: 'Matcha Green Tea', desc: 'An elegant twist with premium Japanese matcha.', color: '#a3b18a' },
-      ],
-    },
-  ];
-
   return (
     <div className="animate-fade-in container" style={{ padding: '64px 24px' }}>
 
       {/* Page Header */}
       <div ref={heroRef} style={{ textAlign: 'center', marginBottom: '80px', marginTop: '32px' }}>
         <div className={`reveal ${heroVisible ? 'visible' : ''}`}>
-          <span style={styles.pill}>Our Range</span>
+          <span style={styles.pill} className="glow-badge">Our Range</span>
           <h1 style={{ fontSize: '3.5rem', color: 'var(--color-primary)', marginBottom: '16px', marginTop: '16px' }}>
             Our Full Range
           </h1>

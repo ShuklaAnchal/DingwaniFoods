@@ -1,14 +1,16 @@
-const ProductCard = ({ name, description, category, imageColor = '#f0f0f0' }) => {
+import { Link } from 'react-router-dom';
+
+const ProductCard = ({ id, name, description, category, image, imageColor = '#f0f0f0' }) => {
   return (
     <div className="glass-panel card-hover animate-slide-up" style={styles.card}>
-      <div className="img-wrapper" style={{...styles.imageContainer, backgroundColor: imageColor}}>
-        <img src="/wafer-dummy.png" alt={name} className="product-img" style={styles.productImage} />
+      <div className="img-wrapper" style={{ ...styles.imageContainer, backgroundColor: imageColor }}>
+        <img src={image} alt={name} className="product-img" style={styles.productImage} />
       </div>
       <div style={styles.content}>
         <span style={styles.category}>{category}</span>
         <h3 style={styles.title}>{name}</h3>
         <p style={styles.description}>{description}</p>
-        <button className="btn btn-outline" style={{ width: '100%' }}>View Details</button>
+        <Link to={`/product/${id}`} className="btn btn-outline" style={{ width: '100%' }}>View Details</Link>
       </div>
     </div>
   );
@@ -32,7 +34,7 @@ const styles = {
   productImage: {
     width: '100%',
     height: '100%',
-    objectFit: 'cover'
+    objectFit: 'contain'
   },
   content: {
     padding: '24px',

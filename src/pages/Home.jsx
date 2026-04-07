@@ -1,8 +1,9 @@
 import React from 'react';
 import ProductCard from '../components/ProductCard';
-import { ArrowRight, Heart, Play, ShieldCheck, Factory, Flame, Award } from 'lucide-react';
+import { ArrowRight, Heart, Play, ShieldCheck, Factory, Flame, Award ,BadgeIndianRupee } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useScrollReveal from '../hooks/useScrollReveal';
+import { products } from '../data/products';
 
 const Home = () => {
   // Scroll-reveal refs
@@ -11,11 +12,8 @@ const Home = () => {
   const [connectRef, connectVisible] = useScrollReveal();
   const [productsRef, productsVisible] = useScrollReveal();
 
-  const featuredProducts = [
-    { name: 'Classic Chocolate Bites', category: 'Wafer Bites', desc: 'Bite-sized crispy squares filled with rich dark chocolate.', color: '#ffd166' },
-    { name: 'Vanilla Dream Cones', category: 'Wafer Cones', desc: 'Crunchy rolled cones with a sweet vanilla cream lining.', color: '#ef476f' },
-    { name: 'Strawberry Crunch', category: 'Wafer Bites', desc: 'Fruity strawberry filling layered in delicate crispy wafers.', color: '#06d6a0' },
-  ];
+const displayedProducts = products.slice(0, 3);
+
 
   return (
     <div className="animate-fade-in">
@@ -88,7 +86,7 @@ const Home = () => {
           </div>
 
           {/* Right: Value pillars */}
-          <div style={promiseStyles.right}>
+          <div style={promiseStyles.right} >
             {[
               { emoji: '🏭', title: 'Thoughtfully Crafted', desc: 'Recipes and ingredients chosen with care — every batch, every market.' },
               { emoji: '📦', title: 'Premium Packaging', desc: 'Packaging that reflects the quality inside — not just the outside.' },
@@ -116,9 +114,10 @@ const Home = () => {
           <div key={layer} className="marquee-content" aria-hidden={layer === 2 ? 'true' : 'false'}>
             {[
               { text: 'Uncompromising quality', icon: <ShieldCheck size={40} color="#f59e0b" className="animate-pulse-slow" />, bg: '#fef3c7' },
-              { text: 'Fully automated factories', icon: <Factory size={40} color="#3b82f6" className="animate-pulse-slow" />, bg: '#dbeafe' },
-              { text: 'Bold seasonings', icon: <Flame size={40} color="#ef4444" className="animate-pulse-slow" />, bg: '#fee2e2' },
-              { text: 'Premium cocoa', icon: <Award size={40} color="#8b5cf6" className="animate-pulse-slow" />, bg: '#ede9fe' }
+              { text: 'Built on Trust', icon: <Factory size={40} color="#3b82f6" className="animate-pulse-slow" />, bg: '#dbeafe' },
+              { text: 'Thoughtfully Crafted', icon: <Flame size={40} color="#ef4444" className="animate-pulse-slow" />, bg: '#fee2e2' },
+              { text: 'Premium Packaging', icon: <Award size={40} color="#8b5cf6" className="animate-pulse-slow" />, bg: '#ede9fe' },
+               { text: 'Affordable Price', icon: <BadgeIndianRupee  size={40} color="#4bf161" className="animate-pulse-slow" />, bg: '#d8fad8' }
             ].map((item, idx) => (
               <div key={idx} className="marquee-item">
                 <div className="marquee-icon-wrapper" style={{ backgroundColor: item.bg }}>
@@ -140,15 +139,17 @@ const Home = () => {
           </div>
 
           <div style={styles.grid}>
-            {featuredProducts.map((prod, idx) => {
+            {displayedProducts.map((prod, idx) => {
               const delays = ['reveal-stagger-1', 'reveal-stagger-2', 'reveal-stagger-3'];
               return (
                 <div key={idx} className={`reveal card-pop ${productsVisible ? 'visible' : ''} ${delays[idx]}`}>
                   <ProductCard
+                   id={prod.id}
                     name={prod.name}
                     category={prod.category}
                     description={prod.desc}
                     imageColor={prod.color}
+                    image={prod.image}
                   />
                 </div>
               );
@@ -319,7 +320,7 @@ const styles = {
   pill: {
     display: 'inline-block',
     padding: '8px 16px',
-    backgroundColor: 'rgba(0, 89, 255, 0.2)',
+    backgroundColor: 'rgba(255,204,0,0.12)',
     color: 'var(--color-secondary)',
     borderRadius: 'var(--radius-full)',
     fontWeight: 600,
@@ -371,7 +372,7 @@ const promiseStyles = {
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
-    position: 'sticky',
+    // position: 'sticky',
     top: '100px',
   },
   label: {
