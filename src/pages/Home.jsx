@@ -285,7 +285,7 @@ const displayedProducts = products.slice(0, 3);
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '56px' }}>
-            <a href="#" className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 28px', fontSize: '1.1rem', backgroundColor: 'white' }}>
+            <a  href="https://www.instagram.com/dingwani_foods/" className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 28px', fontSize: '1.1rem', backgroundColor: 'white' }}>
               Follow @DingwaniFoods
             </a>
           </div>
