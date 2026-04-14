@@ -101,8 +101,8 @@ export const products = [
     category: "Wafer Rolls",
     description: "Strawberry cream filled crispy rolls.",
     fullDescription: "Crunchy wafer rolls filled with smooth strawberry cream.",
-    color: "#ff85a2",
-    image: "/waferRoll.png",
+    color: "#d4798ea2",
+    image: "/roll-straw.png",
     features: ["Strawberry Flavor", "Crunchy Roll", "Light Snack"],
     ingredients:
       "Premium Refined Wheat Flour, Sugar, Milk Solids, Soy Lecithin, Authentic Flavorings, Salt.",
@@ -115,7 +115,7 @@ export const products = [
     category: "Wafer Rolls",
     description: "Chocolate filled crispy wafer rolls.",
     fullDescription: "Crispy wafer rolls filled with rich chocolate cream.",
-    color: "#4e342e",
+    color: "#4e342ed2",
     image: "/waferRoll.png",
     features: ["Chocolate Flavor", "Crunchy Roll", "Rich Taste"],
     ingredients:

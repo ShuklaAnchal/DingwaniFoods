@@ -109,7 +109,7 @@ const Footer = () => {
           <p style={styles.text}>Email: info@dingwanifoods.com</p>
           <p style={styles.text}>Phone: +91 8269968097</p>
           <div style={{ display: "flex", gap: "16px", marginTop: "16px" }}>
-            <a href="#" style={styles.link} className="hover-brightness">
+            <a href="https://www.facebook.com/Dingwanifoodss" style={styles.link} className="hover-brightness">
               <FacebookIcon size={24} />
             </a>
             <a

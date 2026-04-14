@@ -1,5 +1,6 @@
 import React from 'react';
 import ProductCard from '../components/ProductCard';
+import InstaplugTrigger from "../components/InstaplugTrigger";
 import { ArrowRight, Heart, Play, ShieldCheck, Factory, Flame, Award ,BadgeIndianRupee } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useScrollReveal from '../hooks/useScrollReveal';
@@ -303,7 +304,7 @@ const styles = {
     alignItems: 'center',
     position: 'relative',
     overflow: 'hidden',
-    backgroundImage: `url('/store imag.jpg')`,
+    backgroundImage: `url('/store imag.webp')`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',
