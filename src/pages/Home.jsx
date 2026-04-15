@@ -1,9 +1,9 @@
 import React from 'react';
 import ProductCard from '../components/ProductCard';
-import InstaplugTrigger from "../components/InstaplugTrigger";
 import { ArrowRight, Heart, Play, ShieldCheck, Factory, Flame, Award ,BadgeIndianRupee } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useScrollReveal from '../hooks/useScrollReveal';
+import useInstagramFeed from '../hooks/useInstagramFeed';
 import { products } from '../data/products';
 
 const Home = () => {
@@ -12,6 +12,20 @@ const Home = () => {
   const [promiseRef, promiseVisible] = useScrollReveal();
   const [connectRef, connectVisible] = useScrollReveal();
   const [productsRef, productsVisible] = useScrollReveal();
+
+  const { posts: instagramPosts, loading: instagramLoading, error: instagramError } = useInstagramFeed();
+  
+  // Separate into Reels and Posts
+  const rawReels = instagramPosts.filter(p => p.mediaType === 'VIDEO');
+  const rawImages = instagramPosts.filter(p => p.mediaType === 'IMAGE' || p.mediaType === 'CAROUSEL_ALBUM');
+
+  const displayReels = instagramLoading && rawReels.length === 0 
+    ? Array.from({ length: 4 }).map((_, i) => ({ id: `loading-reel-${i}`, loading: true }))
+    : rawReels;
+    
+  const displayImages = instagramLoading && rawImages.length === 0 
+    ? Array.from({ length: 4 }).map((_, i) => ({ id: `loading-img-${i}`, loading: true }))
+    : rawImages;
 
 const displayedProducts = products.slice(0, 3);
 
@@ -269,21 +283,69 @@ const displayedProducts = products.slice(0, 3);
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
-            {[1, 2, 3, 4].map((item) => (
-              <div key={item} className="social-card" style={{ position: 'relative', borderRadius: 'var(--radius-md)', overflow: 'hidden', cursor: 'pointer', aspectRatio: '1/1', boxShadow: 'var(--shadow-sm)' }}>
-                <img src="/wafer-dummy.png" alt={`Instagram Post ${item}`} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)' }} className="social-img" />
-                <div className="social-overlay" style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(28, 53, 127, 0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0, transition: 'opacity 0.3s ease', gap: '32px', color: 'white' }}>
-                  <div className="social-stat" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '1.25rem' }}>
-                    <Heart fill="white" size={26} /> {Math.floor(Math.random() * 800) + 200}
-                  </div>
-                  <div className="social-stat" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '1.25rem' }}>
-                    <Play fill="white" size={26} /> {Math.floor(Math.random() * 10) + 2}k
-                  </div>
+          {/* REELS SECTION */}
+          {(displayReels.length > 0 || instagramLoading) && (
+             <div style={{ marginBottom: '64px' }}>
+                <h3 style={{ fontSize: '1.8rem', color: 'var(--color-primary)', marginBottom: '24px', paddingLeft: '16px', borderLeft: '4px solid var(--color-secondary)' }}>Latest Reels</h3>
+                <div className="hide-scrollbar" style={{ display: 'flex', overflowX: 'auto', gap: '24px', paddingBottom: '24px', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}>
+                  {displayReels.map((post) => (
+                    post.loading ? (
+                      <div key={post.id} className="social-card" style={{ flex: '0 0 auto', width: '260px', aspectRatio: '9/16', position: 'relative', borderRadius: 'var(--radius-md)', overflow: 'hidden', boxShadow: 'var(--shadow-sm)', backgroundColor: 'rgba(28, 53, 127, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', scrollSnapAlign: 'start' }}>
+                        <span style={{ color: 'var(--color-primary)', fontWeight: 'bold' }} className="animate-pulse">Loading...</span>
+                      </div>
+                    ) : (
+                      <a key={post.id} href={post.permalink} target="_blank" rel="noopener noreferrer" className="social-card" style={{ flex: '0 0 auto', width: '260px', aspectRatio: '9/16', position: 'relative', borderRadius: 'var(--radius-md)', overflow: 'hidden', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', display: 'block', scrollSnapAlign: 'start' }}>
+                        <img src={post.mediaUrl} alt="Instagram Reel" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)' }} className="social-img" />
+                        <div style={{ position: 'absolute', top: '12px', right: '12px', zIndex: 5, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                           <Play fill="white" size={16} color="white" />
+                        </div>
+                        <div className="social-overlay" style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(28, 53, 127, 0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0, transition: 'opacity 0.3s ease', gap: '32px', color: 'white' }}>
+                          <div className="social-stat" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '1.25rem' }}>
+                            <Heart fill="white" size={26} /> {post.likes}
+                          </div>
+                          <div className="social-stat" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '1.25rem' }}>
+                            <Play fill="white" size={26} /> {post.views}k
+                          </div>
+                        </div>
+                      </a>
+                    )
+                  ))}
                 </div>
-              </div>
-            ))}
-          </div>
+             </div>
+          )}
+
+          {/* POSTS SECTION */}
+          {(displayImages.length > 0 || instagramLoading) && (
+             <div>
+                <h3 style={{ fontSize: '1.8rem', color: 'var(--color-primary)', marginBottom: '24px', paddingLeft: '16px', borderLeft: '4px solid var(--color-secondary)' }}>Latest Posts</h3>
+                <div className="hide-scrollbar" style={{ display: 'flex', overflowX: 'auto', gap: '24px', paddingBottom: '24px', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}>
+                  {displayImages.map((post) => (
+                    post.loading ? (
+                      <div key={post.id} className="social-card" style={{ flex: '0 0 auto', width: '300px', aspectRatio: '1/1', position: 'relative', borderRadius: 'var(--radius-md)', overflow: 'hidden', boxShadow: 'var(--shadow-sm)', backgroundColor: 'rgba(28, 53, 127, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', scrollSnapAlign: 'start' }}>
+                        <span style={{ color: 'var(--color-primary)', fontWeight: 'bold' }} className="animate-pulse">Loading...</span>
+                      </div>
+                    ) : (
+                      <a key={post.id} href={post.permalink} target="_blank" rel="noopener noreferrer" className="social-card" style={{ flex: '0 0 auto', width: '300px', aspectRatio: '1/1', position: 'relative', borderRadius: 'var(--radius-md)', overflow: 'hidden', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', display: 'block', scrollSnapAlign: 'start' }}>
+                        <img src={post.mediaUrl} alt="Instagram Post" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)' }} className="social-img" />
+                        <div className="social-overlay" style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(28, 53, 127, 0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0, transition: 'opacity 0.3s ease', gap: '32px', color: 'white' }}>
+                          <div className="social-stat" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '1.25rem' }}>
+                            <Heart fill="white" size={26} /> {post.likes}
+                          </div>
+                          <div className="social-stat" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '1.25rem' }}>
+                            <Play fill="white" size={26} /> {post.views}k
+                          </div>
+                        </div>
+                      </a>
+                    )
+                  ))}
+                </div>
+             </div>
+          )}
+          {instagramError && !instagramLoading && (
+            <div style={{ textAlign: 'center', marginTop: '24px', color: 'var(--color-primary)' }}>
+              Could not load Instagram feed at this time.
+            </div>
+          )}
 
           <div style={{ textAlign: 'center', marginTop: '56px' }}>
             <a  href="https://www.instagram.com/dingwani_foods/" className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 28px', fontSize: '1.1rem', backgroundColor: 'white' }}>
